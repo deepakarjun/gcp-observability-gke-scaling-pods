@@ -9,5 +9,4 @@ public class ScalingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ScalingApplication.class, args);
 	}
-
 }

@@ -39,6 +39,14 @@ public class GlobalExceptionHandler {
                 .orElse("Validation failed");
         return build(HttpStatus.BAD_REQUEST, message);
     }
+    
+ // ...existing code...
+    @ExceptionHandler(InvalidScaleRequestException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidScale(InvalidScaleRequestException ex) {
+        _log.warn("Invalid scale request: {}", ex.getMessage());
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+// ...existing code...
 
     private ResponseEntity<Map<String, Object>> build(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of(
