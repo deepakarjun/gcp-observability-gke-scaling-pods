@@ -1,9 +1,3 @@
-//package com.costco.foundation.integration.framework.gcp.scaling.configs;
-//
-//public class GoogleAuthInterceptor {
-//
-//}
-
 package com.costco.foundation.integration.framework.gcp.scaling.configs;
 
 import com.google.auth.oauth2.GoogleCredentials;
