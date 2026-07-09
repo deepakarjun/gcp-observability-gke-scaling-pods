@@ -1,6 +1,9 @@
 package com.costco.foundation.integration.framework.gcp.scaling.configs;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.container.v1.ClusterManagerClient;
+import com.google.cloud.container.v1.ClusterManagerSettings;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.AutoscalingV1Api;
@@ -13,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -31,7 +35,7 @@ public class KubernetesConfig {
      * Custom bean name to avoid clashing with the {@code googleCredentials} bean
      * auto-configured by Spring Cloud GCP ({@code GcpContextAutoConfiguration}).
      */
-    private static final String GKE_CREDENTIALS_BEAN = "gkeGoogleCredentials";
+    public static final String GKE_CREDENTIALS_BEAN = "gkeGoogleCredentials";
     
     /** Grants full Cloud Platform API access for GKE control-plane calls. */
     private static final String SCOPE_CLOUD_PLATFORM = "https://www.googleapis.com/auth/cloud-platform";
@@ -50,6 +54,26 @@ public class KubernetesConfig {
      */
     @Bean(GKE_CREDENTIALS_BEAN)
     public GoogleCredentials gkeGoogleCredentials() throws IOException {
+    	
+    	
+    	System.out.println("Java Version : " + System.getProperty("java.version"));
+    	System.out.println("Java Vendor  : " + System.getProperty("java.vendor"));
+    	try {
+			System.out.println("TLS Provider : " + javax.net.ssl.SSLContext.getDefault().getProvider());
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	try {
+			System.out.println("ALPN Supported : " + javax.net.ssl.SSLContext.getDefault().getProtocol());
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+//    	System.out.println(io.netty.handler.ssl.OpenSsl.isAvailable());
+    	
         return GoogleCredentials.getApplicationDefault().createScoped(GKE_SCOPES);
     }
 
@@ -82,5 +106,22 @@ public class KubernetesConfig {
     @Bean
     public AutoscalingV1Api autoscalingV1Api(ApiClient apiClient) {
         return new AutoscalingV1Api(apiClient);
+    }
+    
+    /**
+     * Client for the GKE Container API. Spring closes it automatically on shutdown.
+     *
+     * @param gkeGoogleCredentials the shared, auto-refreshing GKE credentials
+     * @return a configured {@link ClusterManagerClient}
+     * @throws IOException if the client cannot be initialized
+     */
+    @Bean(destroyMethod = "close")
+    public ClusterManagerClient clusterManagerClient(
+            @Qualifier(KubernetesConfig.GKE_CREDENTIALS_BEAN) GoogleCredentials gkeGoogleCredentials)
+            throws IOException {
+        var settings = ClusterManagerSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(gkeGoogleCredentials))
+                .build();
+        return ClusterManagerClient.create(settings);
     }
 }

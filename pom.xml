@@ -67,10 +67,18 @@
 		    <version>26.0.0</version>
 		</dependency>
 		
+		<!-- ...existing dependencies... -->
+		<dependency>
+		    <groupId>com.google.cloud</groupId>
+		    <artifactId>google-cloud-container</artifactId>
+		    <!-- version managed by com.google.cloud:libraries-bom -->
+		</dependency>
+		<!-- ...existing dependencies... -->
+		
 		<dependency>
 		    <groupId>com.google.auth</groupId>
 		    <artifactId>google-auth-library-oauth2-http</artifactId>
-		    <version>1.23.0</version>
+		    <!-- <version>1.23.0</version>  -->
 		</dependency>
 
 		<dependency>
@@ -93,12 +101,21 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
 			<dependency>
 				<groupId>com.google.cloud</groupId>
 				<artifactId>spring-cloud-gcp-dependencies</artifactId>
 				<version>${spring-cloud-gcp.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+			    <groupId>com.google.cloud</groupId>
+			    <artifactId>libraries-bom</artifactId>
+			    <version>26.71.0</version>
+			    <type>pom</type>
+			    <scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
