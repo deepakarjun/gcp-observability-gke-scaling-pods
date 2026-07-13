@@ -5,6 +5,8 @@ import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.PodPhas
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ClusterKeyPointsService;
+import com.costco.foundation.integration.framework.gcp.scaling.service.gke.LogSeverityService;
+import com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke.LogSeverityServiceImpl;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -42,9 +44,11 @@ public class ClusterKeyPointsServiceImpl implements ClusterKeyPointsService {
     private static final List<String> SYSTEM_NAMESPACE_PREFIXES = List.of("gke-managed-");
 
     private final GkeApiClientFactory _apiClientFactory;
+    private final LogSeverityService _logSeverityService;
 
-    public ClusterKeyPointsServiceImpl(GkeApiClientFactory apiClientFactory) {
+    public ClusterKeyPointsServiceImpl(GkeApiClientFactory apiClientFactory, LogSeverityService logSeverityService) {
         _apiClientFactory = apiClientFactory;
+        _logSeverityService= logSeverityService;
     }
 
     @Override
@@ -63,6 +67,8 @@ public class ClusterKeyPointsServiceImpl implements ClusterKeyPointsService {
                 tallyPods(coreApi, namespace, accumulator);
             }
 
+            var severityCounts = _logSeverityService.getWeeklySeverityCounts(projectId, clusterId);
+            
             var keyPoints = new ClusterKeyPoints(
                     projectId,
                     clusterId,
@@ -70,7 +76,8 @@ public class ClusterKeyPointsServiceImpl implements ClusterKeyPointsService {
                     accumulator.servicesRunning,
                     accumulator.servicesSuspended,
                     accumulator.activePods,
-                    accumulator.containers);
+                    accumulator.containers,
+                    severityCounts);
 
             _log.info("Key points for cluster '{}': {}", clusterId, keyPoints);
             return keyPoints;

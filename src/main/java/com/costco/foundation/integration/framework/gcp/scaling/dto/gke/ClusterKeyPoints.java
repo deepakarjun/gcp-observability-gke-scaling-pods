@@ -18,5 +18,6 @@ public record ClusterKeyPoints(
         int servicesRunning,
         int servicesSuspended,
         int activePods,
-        int containers) {
+        int containers,
+        LogSeverityCounts logSeverityCounts) {
 }

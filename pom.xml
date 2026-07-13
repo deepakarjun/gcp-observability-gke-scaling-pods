@@ -76,6 +76,12 @@
 		<!-- ...existing dependencies... -->
 		
 		<dependency>
+		    <groupId>com.google.cloud</groupId>
+		    <artifactId>google-cloud-logging</artifactId>
+		    <!-- version managed by com.google.cloud:libraries-bom -->
+		</dependency>
+		
+		<dependency>
 		    <groupId>com.google.auth</groupId>
 		    <artifactId>google-auth-library-oauth2-http</artifactId>
 		    <!-- <version>1.23.0</version>  -->
