@@ -86,6 +86,14 @@
 		    <artifactId>google-auth-library-oauth2-http</artifactId>
 		    <!-- <version>1.23.0</version>  -->
 		</dependency>
+		
+		<!-- ...existing dependencies... -->
+		<dependency>
+		    <groupId>com.google.cloud</groupId>
+		    <artifactId>google-cloud-monitoring</artifactId>
+		    <!-- version managed by com.google.cloud:libraries-bom -->
+		</dependency>
+		<!-- ...existing dependencies... -->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
