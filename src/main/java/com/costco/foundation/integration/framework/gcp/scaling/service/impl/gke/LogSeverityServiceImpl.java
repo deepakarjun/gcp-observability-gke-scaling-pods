@@ -39,7 +39,8 @@ public class LogSeverityServiceImpl implements LogSeverityService {
     private static final Logger _log = LoggerFactory.getLogger(LogSeverityServiceImpl.class);
 
     /** Rolling window over which severities are counted. */
-    private static final Duration LOOKBACK_WINDOW = Duration.ofDays(7);
+//    private static final Duration LOOKBACK_WINDOW = Duration.ofDays(7);
+    private static final Duration LOOKBACK_WINDOW = Duration.ofMinutes(10);
 
     /** Built-in log-based metric exposing entry counts by severity. */
 //    private static final String LOG_ENTRY_COUNT_METRIC = "logging.googleapis.com/log_entry_count";
