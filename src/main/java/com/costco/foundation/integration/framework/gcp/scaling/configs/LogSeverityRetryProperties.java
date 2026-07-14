@@ -1,8 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.configs;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.ConstructorBinding;
-import org.springframework.stereotype.Component;
 
 /**
  * Retry/backoff settings for Cloud Logging severity queries.

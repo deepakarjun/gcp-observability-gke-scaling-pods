@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-//import java.util.List;
-
 /**
  * Default implementation that lists deployments scaled to zero replicas,
  * treating them as suspended/stopped services eligible for resume.
