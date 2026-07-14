@@ -1,5 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
+import com.costco.foundation.integration.framework.gcp.scaling.configs.LogSeverityMetricProperties;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.LogSeverityCounts;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.LogSeverity;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
@@ -41,7 +42,7 @@ public class LogSeverityServiceImpl implements LogSeverityService {
     private static final Duration LOOKBACK_WINDOW = Duration.ofDays(7);
 
     /** Built-in log-based metric exposing entry counts by severity. */
-    private static final String LOG_ENTRY_COUNT_METRIC = "logging.googleapis.com/log_entry_count";
+//    private static final String LOG_ENTRY_COUNT_METRIC = "logging.googleapis.com/log_entry_count";
 
     /** Monitored resource type for GKE workload (container) logs. */
     private static final String RESOURCE_TYPE = "k8s_container";
@@ -67,9 +68,11 @@ public class LogSeverityServiceImpl implements LogSeverityService {
             """;
 
     private final MetricServiceClient _metricServiceClient;
+    private final LogSeverityMetricProperties _metricProperties;
 
-    public LogSeverityServiceImpl(MetricServiceClient metricServiceClient) {
+    public LogSeverityServiceImpl(MetricServiceClient metricServiceClient, LogSeverityMetricProperties metricProperties) {
         _metricServiceClient = metricServiceClient;
+        _metricProperties = metricProperties;
     }
 
     @Override
@@ -107,6 +110,7 @@ public class LogSeverityServiceImpl implements LogSeverityService {
      * Builds a single {@link ListTimeSeriesRequest} for the log-entry-count metric
      * scoped to the cluster over the lookback window.
      */
+    
     private ListTimeSeriesRequest buildRequest(String projectId, String clusterId) {
         var now = Instant.now();
         var interval = TimeInterval.newBuilder()
@@ -114,8 +118,10 @@ public class LogSeverityServiceImpl implements LogSeverityService {
                 .setEndTime(Timestamps.fromMillis(now.toEpochMilli()))
                 .build();
 
+        // Metric type is externalized so the KPI can point at a noise-filtered,
+        // user-defined log-based metric instead of the raw system metric.
         var filter = FILTER_TEMPLATE.formatted(
-                LOG_ENTRY_COUNT_METRIC, RESOURCE_TYPE, clusterId);
+                _metricProperties.metricType(), RESOURCE_TYPE, clusterId);
 
         return ListTimeSeriesRequest.newBuilder()
                 .setName(ProjectName.of(projectId).toString())
@@ -124,6 +130,24 @@ public class LogSeverityServiceImpl implements LogSeverityService {
                 .setView(ListTimeSeriesRequest.TimeSeriesView.FULL)
                 .build();
     }
+    
+//    private ListTimeSeriesRequest buildRequest(String projectId, String clusterId) {
+//        var now = Instant.now();
+//        var interval = TimeInterval.newBuilder()
+//                .setStartTime(Timestamps.fromMillis(now.minus(LOOKBACK_WINDOW).toEpochMilli()))
+//                .setEndTime(Timestamps.fromMillis(now.toEpochMilli()))
+//                .build();
+//
+//        var filter = FILTER_TEMPLATE.formatted(
+//                LOG_ENTRY_COUNT_METRIC, RESOURCE_TYPE, clusterId);
+//
+//        return ListTimeSeriesRequest.newBuilder()
+//                .setName(ProjectName.of(projectId).toString())
+//                .setFilter(filter)
+//                .setInterval(interval)
+//                .setView(ListTimeSeriesRequest.TimeSeriesView.FULL)
+//                .build();
+//    }
 
     /**
      * Adds a single time series' points to the running totals, but only for the
