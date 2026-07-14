@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendedServiceListResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.SuspendedServiceListResponse;
 
 /**
  * Provides discovery of suspended (scaled-to-zero) GKE services.

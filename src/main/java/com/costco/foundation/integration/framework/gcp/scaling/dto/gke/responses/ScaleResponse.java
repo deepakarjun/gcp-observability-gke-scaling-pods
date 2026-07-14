@@ -1,4 +1,4 @@
-package com.costco.foundation.integration.framework.gcp.scaling.dto.gke;
+package com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses;
 
 //public record ScaleResponse() {
 //

@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.LogSeverityCounts;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.LogSeverityCounts;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.LogSeverity;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.LogSeverityService;

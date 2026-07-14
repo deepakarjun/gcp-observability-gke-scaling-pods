@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleToReplicasRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleToReplicasResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleToReplicasRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleToReplicasResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ReplicaScalingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

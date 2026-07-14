@@ -1,4 +1,4 @@
-package com.costco.foundation.integration.framework.gcp.scaling.dto.gke;
+package com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses;
 
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.LogSeverity;
 

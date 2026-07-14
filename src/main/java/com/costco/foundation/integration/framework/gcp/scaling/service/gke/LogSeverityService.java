@@ -1,8 +1,8 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.LogSeverityCounts;
-
 import java.util.List;
+
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.LogSeverityCounts;
 
 /**
  * Provides Cloud Logging severity counts for the workloads of a GKE cluster.

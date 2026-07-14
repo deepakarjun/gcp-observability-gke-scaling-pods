@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
 import com.costco.foundation.integration.framework.gcp.scaling.configs.KeyPointsProperties;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ClusterKeyPoints;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ClusterKeyPoints;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.PodPhase;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;

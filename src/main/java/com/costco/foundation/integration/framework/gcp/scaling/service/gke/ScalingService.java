@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleResponse;
 
 /**
  * Contract for GKE scaling operations.

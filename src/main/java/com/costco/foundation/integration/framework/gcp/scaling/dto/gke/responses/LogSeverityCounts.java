@@ -1,4 +1,4 @@
-package com.costco.foundation.integration.framework.gcp.scaling.dto.gke;
+package com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses;
 
 /**
  * Cloud Logging severity counts for a cluster over a rolling window.

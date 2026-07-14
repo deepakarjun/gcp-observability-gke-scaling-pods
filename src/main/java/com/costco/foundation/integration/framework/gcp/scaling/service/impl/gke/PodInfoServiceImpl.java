@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.MinMaxPodResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.PodInfoResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.MinMaxPodResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.PodInfoResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.PodInfoService;
 import io.kubernetes.client.openapi.ApiClient;

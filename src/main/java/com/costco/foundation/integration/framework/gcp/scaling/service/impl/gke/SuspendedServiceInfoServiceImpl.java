@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendedServiceInfo;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendedServiceListResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.SuspendedServiceInfo;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.SuspendedServiceListResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.SuspendedServiceInfoService;

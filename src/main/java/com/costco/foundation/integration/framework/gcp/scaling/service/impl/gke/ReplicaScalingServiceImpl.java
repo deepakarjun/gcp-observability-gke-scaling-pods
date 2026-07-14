@@ -1,8 +1,8 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleToReplicasRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleToReplicasResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleToReplicasRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleToReplicasResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ScaleDirection;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.InvalidScaleRequestException;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.PodInfoService;

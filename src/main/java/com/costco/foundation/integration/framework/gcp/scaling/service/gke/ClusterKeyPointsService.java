@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ClusterKeyPoints;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ClusterKeyPoints;
 
 /**
  * Provides an aggregated "key points" summary for a GKE cluster.

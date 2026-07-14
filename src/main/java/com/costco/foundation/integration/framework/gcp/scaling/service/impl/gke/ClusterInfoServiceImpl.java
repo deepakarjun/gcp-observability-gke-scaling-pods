@@ -1,10 +1,10 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
 import com.costco.foundation.integration.framework.gcp.scaling.configs.KeyPointsProperties;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ClusterInfo;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ClusterListResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.NamespaceInfo;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.NamespaceListResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ClusterInfo;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ClusterListResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.NamespaceInfo;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.NamespaceListResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ClusterInfoService;

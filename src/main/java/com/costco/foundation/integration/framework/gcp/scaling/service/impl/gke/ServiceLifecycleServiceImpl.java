@@ -1,9 +1,9 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ResumeRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ScaleRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ServiceStateResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ScaleDirection;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ServiceState;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ScalingService;

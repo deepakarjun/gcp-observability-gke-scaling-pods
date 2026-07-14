@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ClusterKeyPoints;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ClusterKeyPoints;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ClusterKeyPointsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

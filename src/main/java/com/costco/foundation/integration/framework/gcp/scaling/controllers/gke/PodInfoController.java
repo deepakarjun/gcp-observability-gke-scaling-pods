@@ -1,7 +1,7 @@
 package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.MinMaxPodResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.PodInfoResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.MinMaxPodResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.PodInfoResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.PodInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

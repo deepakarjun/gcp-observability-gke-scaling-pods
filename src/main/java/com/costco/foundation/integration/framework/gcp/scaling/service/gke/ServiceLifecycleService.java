@@ -1,8 +1,8 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ResumeRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ServiceStateResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
 
 /**
  * Contract for suspending and resuming a service in the cluster.

@@ -1,8 +1,8 @@
 package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ResumeRequest;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.ServiceStateResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceLifecycleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
