@@ -59,8 +59,7 @@ public class ClusterKeyPointsServiceImpl implements ClusterKeyPointsService {
                 tallyPods(coreApi, namespace, accumulator);
             }
 
-            var severityCounts =
-                    _logSeverityService.getWeeklySeverityCounts(projectId, clusterId, userNamespaces);
+            var severityCounts = _logSeverityService.getWeeklySeverityCounts(projectId, clusterId, userNamespaces);
 
             var keyPoints = new ClusterKeyPoints(
                     projectId,

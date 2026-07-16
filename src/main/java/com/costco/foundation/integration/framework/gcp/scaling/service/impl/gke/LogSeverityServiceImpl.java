@@ -77,16 +77,15 @@ public class LogSeverityServiceImpl implements LogSeverityService {
     }
 
     @Override
-    public LogSeverityCounts getWeeklySeverityCounts(
-            String projectId, String clusterId, List<String> userNamespaces) {
+    public LogSeverityCounts getWeeklySeverityCounts( String projectId, String clusterId, List<String> userNamespaces) {
         if (userNamespaces == null || userNamespaces.isEmpty()) {
             _log.info("No user namespaces supplied for cluster '{}'; returning zero severity counts",
                     clusterId);
             return EMPTY_COUNTS;
         }
 
-        _log.info("Reading weekly severity metric for cluster '{}' across {} namespace(s)",
-                clusterId, userNamespaces.size());
+        _log.info("Reading weekly severity metric for cluster '{}' across {} namespace(s)", clusterId, userNamespaces.size() );
+
         try {
             var userNamespaceSet = Set.copyOf(userNamespaces);
             var request = buildRequest(projectId, clusterId);
@@ -100,8 +99,7 @@ public class LogSeverityServiceImpl implements LogSeverityService {
             _log.info("Weekly service severity counts for cluster '{}': {}", clusterId, counts);
             return counts;
         } catch (Exception ex) {
-            _log.error("Failed to read severity metric for cluster '{}' in project '{}'",
-                    clusterId, projectId, ex);
+            _log.error("Failed to read severity metric for cluster '{}' in project '{}'", clusterId, projectId, ex);
             throw new ScalingException(
                     "Failed to read severity metric for cluster: " + clusterId, ex);
         }
