@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.configs;
 
-//import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.KubernetesClientMode;
+import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.KubernetesClientMode;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.google.auth.oauth2.GoogleCredentials;
 import io.kubernetes.client.openapi.ApiClient;
@@ -10,6 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 
 /**
  * Builds the Kubernetes {@link ApiClient} using a mode-driven strategy so the
@@ -69,6 +75,29 @@ public class KubernetesConfig {
      * Local client: uses the configured API base path and attaches the
      * auto-refreshing {@link GoogleAuthInterceptor} for GKE authentication.
      */
+//    private ApiClient buildLocalClient(GoogleCredentials gkeGoogleCredentials) {
+//        var basePath = _properties.apiBasePath();
+//        if (basePath == null || basePath.isBlank()) {
+//            throw new ScalingException(
+//                    "kubernetes.api-base-path must be set when client-mode is LOCAL");
+//        }
+//        _log.info("Using local configuration with API base path '{}'", basePath);
+//
+//        var apiClient = new ApiClient();
+//        apiClient.setBasePath(basePath);
+//
+//        var httpClient = apiClient.getHttpClient().newBuilder()
+//                .addInterceptor(new GoogleAuthInterceptor(gkeGoogleCredentials))
+//                .build();
+//        apiClient.setHttpClient(httpClient);
+//        return apiClient;
+//    }
+    
+    /**
+     * Local client: uses the configured API base path, attaches the
+     * auto-refreshing {@link GoogleAuthInterceptor}, and trusts the cluster CA
+     * certificate to satisfy TLS validation.
+     */
     private ApiClient buildLocalClient(GoogleCredentials gkeGoogleCredentials) {
         var basePath = _properties.apiBasePath();
         if (basePath == null || basePath.isBlank()) {
@@ -79,6 +108,7 @@ public class KubernetesConfig {
 
         var apiClient = new ApiClient();
         apiClient.setBasePath(basePath);
+        applyCaCert(apiClient);
 
         var httpClient = apiClient.getHttpClient().newBuilder()
                 .addInterceptor(new GoogleAuthInterceptor(gkeGoogleCredentials))
@@ -86,6 +116,44 @@ public class KubernetesConfig {
         apiClient.setHttpClient(httpClient);
         return apiClient;
     }
+    
+    
+    /**
+     * Loads the cluster CA certificate from configuration (base64 preferred,
+     * else file path) and applies it to the client so TLS validation succeeds
+     * against the GKE private CA.
+     */
+    private void applyCaCert(ApiClient apiClient) {
+        try {
+            var caCertBytes = resolveCaCertBytes();
+            if (caCertBytes == null) {
+                _log.warn("No CA cert configured; TLS validation may fail against the cluster");
+                return;
+            }
+            apiClient.setSslCaCert(new ByteArrayInputStream(caCertBytes));
+            _log.info("Applied cluster CA certificate to Kubernetes ApiClient");
+        } catch (Exception ex) {
+            _log.error("Failed to apply cluster CA certificate", ex);
+            throw new ScalingException("Failed to apply cluster CA certificate", ex);
+        }
+    }
+    
+    /**
+     * @return the CA certificate bytes from base64 config, else from the file
+     *         path, else {@code null} if neither is configured
+     */
+    private byte[] resolveCaCertBytes() throws Exception {
+        var base64 = _properties.caCertBase64();
+        if (base64 != null && !base64.isBlank()) {
+            return Base64.getDecoder().decode(base64.trim());
+        }
+        var path = _properties.caCertPath();
+        if (path != null && !path.isBlank()) {
+            return Files.readAllBytes(Path.of(path));
+        }
+        return null;
+    }
+    
 }
 
 
