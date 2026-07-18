@@ -1,6 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.configs;
 
-import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.KubernetesClientMode;
+//import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.KubernetesClientMode;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.google.auth.oauth2.GoogleCredentials;
 import io.kubernetes.client.openapi.ApiClient;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
