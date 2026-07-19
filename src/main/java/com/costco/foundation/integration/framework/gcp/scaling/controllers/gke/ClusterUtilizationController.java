@@ -42,17 +42,15 @@ public class ClusterUtilizationController {
 
     /** SSE event name for utilization updates. */
     private static final String UTILIZATION_EVENT = "utilization";
+    private static final String STREAM_PATH = "/stream";
 
     /** Dedicated scheduler for pushing periodic SSE samples. */
-    private final ScheduledExecutorService _scheduler =
-            Executors.newScheduledThreadPool(4);
+    private final ScheduledExecutorService _scheduler = Executors.newScheduledThreadPool(4);
 
     private final ClusterUtilizationService _utilizationService;
     private final UtilizationStreamProperties _streamProperties;
 
-    public ClusterUtilizationController(
-            ClusterUtilizationService utilizationService,
-            UtilizationStreamProperties streamProperties) {
+    public ClusterUtilizationController( ClusterUtilizationService utilizationService, UtilizationStreamProperties streamProperties) {
         _utilizationService = utilizationService;
         _streamProperties = streamProperties;
     }
@@ -69,9 +67,7 @@ public class ClusterUtilizationController {
      * @return the utilization response wrapped in a 200
      */
     @GetMapping
-    @Operation(summary = "Get cluster utilization",
-            description = "Returns CPU/Memory/Disk series for the selected window "
-                    + "(default: last 30 minutes).")
+    @Operation(summary = "Get cluster utilization", description = "Returns CPU/Memory/Disk series for the selected window " + "(default: last 30 minutes).")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Utilization retrieved"),
             @ApiResponse(responseCode = "400", description = "Invalid range or custom window"),
@@ -106,7 +102,7 @@ public class ClusterUtilizationController {
      * @param clusterId the cluster name
      * @return an {@link SseEmitter} streaming {@code utilization} events
      */
-    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = STREAM_PATH, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Operation(summary = "Stream cluster utilization (SSE)",
             description = "Server-Sent Events stream emitting the latest CPU/Memory/Disk "
                     + "sample on a fixed cadence for live charts.")
