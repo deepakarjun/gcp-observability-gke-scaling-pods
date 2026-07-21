@@ -4,7 +4,13 @@ import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.RollbackResult;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
+import com.costco.foundation.integration.framework.gcp.scaling.service.audit.AuditLogService;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceRollbackService;
+import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
+import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditStatus;
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditRecordCommand;
+
+
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.openapi.models.V1ReplicaSet;
@@ -42,45 +48,61 @@ public class ServiceRollbackServiceImpl implements ServiceRollbackService {
     private static final long UNKNOWN_REVISION = 0L;
 
     private final GkeApiClientFactory _apiClientFactory;
+    private final AuditLogService _auditLogService;
 
-    public ServiceRollbackServiceImpl(GkeApiClientFactory apiClientFactory) {
+    public ServiceRollbackServiceImpl(GkeApiClientFactory apiClientFactory, AuditLogService auditLogService) {
         _apiClientFactory = apiClientFactory;
+        _auditLogService = auditLogService;
     }
 
     @Override
-    public RollbackResult rollback(
-            String projectId, String clusterId, String namespace,
-            String serviceName, RollbackRequest request) {
+    public RollbackResult rollback( String projectId, String clusterId, String namespace, String serviceName, RollbackRequest request) {
+    	
         var requestedRevision = resolveRequestedRevision(request);
-        _log.info("Rolling back service '{}' in namespace '{}', cluster '{}' (target revision: {})",
-                serviceName, namespace, clusterId,
-                requestedRevision == PREVIOUS_REVISION_SENTINEL ? "previous" : requestedRevision);
+        _log.info("Rolling back service '{}' in namespace '{}', cluster '{}' (target revision: {})", serviceName, namespace, clusterId, requestedRevision == PREVIOUS_REVISION_SENTINEL ? "previous" : requestedRevision);
+        
         try {
-            var apiClient = _apiClientFactory.createApiClient(projectId, clusterId);
-            var appsApi = new AppsV1Api(apiClient);
+            var apiClient 		= _apiClientFactory.createApiClient(projectId, clusterId);
+            var appsApi 		= new AppsV1Api(apiClient);
 
-            var deployment = appsApi.readNamespacedDeployment(serviceName, namespace).execute();
+            var deployment 		= appsApi.readNamespacedDeployment(serviceName, namespace).execute();
             var currentRevision = revisionOf(deployment.getMetadata());
 
-            var replicaSets = listOwnedReplicaSets(appsApi, namespace, serviceName);
-            var target = selectTargetReplicaSet(replicaSets, currentRevision, requestedRevision);
-            var targetRevision = revisionOf(target.getMetadata());
+            var replicaSets 	= listOwnedReplicaSets(appsApi, namespace, serviceName);
+            var target 			= selectTargetReplicaSet(replicaSets, currentRevision, requestedRevision);
+            var targetRevision 	= revisionOf(target.getMetadata());
 
             applyRollback(appsApi, namespace, serviceName, deployment, target, targetRevision);
 
-            var result = new RollbackResult(
-                    projectId, clusterId, namespace, serviceName,
-                    currentRevision, targetRevision,
-                    extractImages(target), OffsetDateTime.now(ZoneOffset.UTC));
-            _log.info("Rolled back service '{}' from revision {} to {}",
-                    serviceName, currentRevision, targetRevision);
+            var result = new RollbackResult( projectId, clusterId, namespace, serviceName, currentRevision, targetRevision, extractImages(target), OffsetDateTime.now(ZoneOffset.UTC));
+            
+            _log.info("Rolled back service '{}' from revision {} to {}", serviceName, currentRevision, targetRevision);
+            
             return result;
+            
         } catch (ScalingException ex) {
+        	
+//        	_auditLogService.record(new com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditRecordCommand(
+//        		    AuditAction.ROLLBACK,
+//        		    AuditStatus.FAILURE,
+//        		    projectId,
+//        		    clusterId,
+//        		    namespace,
+//        		    serviceName,
+//        		    null,
+//        		    ex.getMessage()
+//        		));
+        	
+        	_auditLogService.record(new AuditRecordCommand( AuditAction.ROLLBACK, AuditStatus.FAILURE, projectId, clusterId, namespace, serviceName, null, ex.getMessage()) );
+        	
             throw ex; // preserve context (e.g. cluster/service not found)
+            
         } catch (Exception ex) {
-            _log.error("Failed to roll back service '{}' in namespace '{}', cluster '{}'",
-                    serviceName, namespace, clusterId, ex);
+        	
+            _log.error("Failed to roll back service '{}' in namespace '{}', cluster '{}'", serviceName, namespace, clusterId, ex);
+            
             throw new ScalingException("Failed to roll back service: " + serviceName, ex);
+            
         }
     }
 

@@ -35,8 +35,7 @@ public class SuspendedServiceController {
     @GetMapping("/suspended-services")
     @Operation(
             summary = "List suspended services",
-            description = "Returns deployments scaled to zero replicas in the given namespace, "
-                    + "representing services eligible for resume.")
+            description = "Returns deployments scaled to zero replicas in the given namespace, " + "representing services eligible for resume.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Suspended services retrieved successfully"),
             @ApiResponse(responseCode = "500", description = "Cluster not found or failed to fetch services")
