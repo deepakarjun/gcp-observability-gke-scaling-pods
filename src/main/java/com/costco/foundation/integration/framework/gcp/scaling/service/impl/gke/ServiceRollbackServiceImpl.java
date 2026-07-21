@@ -4,12 +4,9 @@ import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.RollbackResult;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
-import com.costco.foundation.integration.framework.gcp.scaling.service.audit.AuditLogService;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceRollbackService;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
-import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditStatus;
-import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditRecordCommand;
-
+import com.costco.foundation.integration.framework.gcp.scaling.audit.Auditable;
 
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
@@ -48,14 +45,13 @@ public class ServiceRollbackServiceImpl implements ServiceRollbackService {
     private static final long UNKNOWN_REVISION = 0L;
 
     private final GkeApiClientFactory _apiClientFactory;
-    private final AuditLogService _auditLogService;
 
-    public ServiceRollbackServiceImpl(GkeApiClientFactory apiClientFactory, AuditLogService auditLogService) {
+    public ServiceRollbackServiceImpl(GkeApiClientFactory apiClientFactory) {
         _apiClientFactory = apiClientFactory;
-        _auditLogService = auditLogService;
     }
 
     @Override
+    @Auditable(AuditAction.ROLLBACK)
     public RollbackResult rollback( String projectId, String clusterId, String namespace, String serviceName, RollbackRequest request) {
     	
         var requestedRevision = resolveRequestedRevision(request);
@@ -81,21 +77,8 @@ public class ServiceRollbackServiceImpl implements ServiceRollbackService {
             return result;
             
         } catch (ScalingException ex) {
-        	
-//        	_auditLogService.record(new com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditRecordCommand(
-//        		    AuditAction.ROLLBACK,
-//        		    AuditStatus.FAILURE,
-//        		    projectId,
-//        		    clusterId,
-//        		    namespace,
-//        		    serviceName,
-//        		    null,
-//        		    ex.getMessage()
-//        		));
-        	
-        	_auditLogService.record(new AuditRecordCommand( AuditAction.ROLLBACK, AuditStatus.FAILURE, projectId, clusterId, namespace, serviceName, null, ex.getMessage()) );
-        	
-            throw ex; // preserve context (e.g. cluster/service not found)
+
+        	throw ex; // preserve context (e.g. cluster/service not found)
             
         } catch (Exception ex) {
         	

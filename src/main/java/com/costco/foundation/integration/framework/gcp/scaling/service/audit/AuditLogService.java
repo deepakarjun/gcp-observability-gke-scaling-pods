@@ -1,13 +1,13 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.audit;
 
+import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditLogFilter;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditLogResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.audit.AuditRecordCommand;
-import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Records and retrieves audit entries for scaling operations.
+ * Records, retrieves, and prunes audit entries for scaling operations.
  */
 public interface AuditLogService {
 
@@ -20,11 +20,18 @@ public interface AuditLogService {
     AuditLogResponse record(AuditRecordCommand command);
 
     /**
-     * Retrieves audit entries, optionally filtered by action.
+     * Retrieves audit entries matching the given filter.
      *
-     * @param action   optional action filter; {@code null} returns all
+     * @param filter   optional criteria; {@code null} returns all
      * @param pageable pagination and sorting
      * @return a page of audit entries
      */
-    Page<AuditLogResponse> findAll(AuditAction action, Pageable pageable);
+    Page<AuditLogResponse> search(AuditLogFilter filter, Pageable pageable);
+
+    /**
+     * Deletes audit entries older than the configured retention window.
+     *
+     * @return the number of records purged
+     */
+    int purgeExpired();
 }
