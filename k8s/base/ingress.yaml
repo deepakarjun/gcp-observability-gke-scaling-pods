@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: integration-framework-ingress
+  namespace: gke-data-track-foundation
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+
+spec:
+
+  tls:
+  - secretName: dtb-ss-cert
+
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: integration-framework-service
+            port:
+              number: 80

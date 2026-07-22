@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integration-framework-be
+  namespace: gke-data-track-foundation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: integration-framework-be
+  template:
+    metadata:
+      labels:
+        app: integration-framework-be
+    spec:
+      serviceAccountName: backend-ksa
+      nodeSelector:
+        cloud.google.com/gke-nodepool: datatrack-foundation-nodepool
+      containers:
+        - name: integration-framework-be
+          image: us-central1-docker.pkg.dev/ust-gcp-costco-replatform-poc/data-track-foundation/integration-framework-be:1.00
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+
+          envFrom:
+            - configMapRef:
+                name: integration-framework-config
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 5    
+
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.2
+
+          env:
+            - name: CLOUD_SQL_INSTANCE
+              valueFrom:
+                configMapKeyRef:
+                  name: integration-framework-config
+                  key: CLOUD_SQL_INSTANCE
+
+          args:
+            - "--private-ip"
+            - "--port=5432"
+            - "$(CLOUD_SQL_INSTANCE)"
+          securityContext:
+            runAsNonRoot: true

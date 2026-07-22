@@ -1,0 +1,70 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: gke-data-track-foundation
+
+patches:
+
+  - target:
+      kind: ConfigMap
+      name: integration-framework-config
+    patch: |-
+    
+      - op: replace
+        path: /data/SEVERITY_METRIC
+        value: logging.googleapis.com/user/datatrack_noise
+    
+      - op: replace
+        path: /data/GCP_PROJECT_ID
+        value: ust-gcp-costco-replatform-poc
+      
+      - op: replace
+        path: /data/DEFAULT_GCP_PROJECT_ID
+        value: ust-gcp-costco-replatform-poc
+
+      - op: replace
+        path: /data/NAME_SPACE_PREFIX
+        value: ref-be,core-be,gke-data
+
+      - op: replace
+        path: /data/KUBERNETES_CLIENT_MODE
+        value: IN_CLUSTER
+
+      - op: replace
+        path: /data/KUBERNETES_API_BASE_PATH
+        value: https://34.55.252.235
+
+      - op: replace
+        path: /data/KUBERNETES_CLIENT_CERT_PATH
+        value: 
+
+      - op: replace
+        path: /data/SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://127.0.0.1:5432/data-track-foundation-db
+
+      - op: replace
+        path: /data/SPRING_DATASOURCE_USERNAME
+        value: datatrack_user
+
+      - op: replace
+        path: /data/SPRING_DATASOURCE_PASSWORD
+        value: G8KtUm,2^ZT<7]HH
+
+      - op: replace
+        path: /data/SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.PostgreSQLDialect
+
+      - op: replace
+        path: /data/SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: validate
+        
+      - op: replace
+        path: /data/SPRING_JPA_OPEN_IN_VIEW
+        value: "false"
+      
+      - op: replace
+        path: /data/CLOUD_SQL_INSTANCE
+        value: ust-gcp-costco-replatform-poc:us-central1:signs-dev-cloudsql-uscentral1-001
