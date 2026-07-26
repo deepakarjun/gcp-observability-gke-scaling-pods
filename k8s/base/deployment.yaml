@@ -18,7 +18,7 @@ spec:
         cloud.google.com/gke-nodepool: datatrack-foundation-nodepool
       containers:
         - name: integration-framework-be
-          image: us-central1-docker.pkg.dev/ust-gcp-costco-replatform-poc/data-track-foundation/integration-framework-be:1.01
+          image: us-central1-docker.pkg.dev/ust-gcp-costco-replatform-poc/data-track-foundation/integration-framework-be:1.02
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
