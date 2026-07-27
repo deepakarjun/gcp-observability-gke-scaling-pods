@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Rollout/version history for services (Deployments) in a GKE cluster")
 public class ServiceVersionHistoryController {
 
-    private static final Logger _log =
-            LoggerFactory.getLogger(ServiceVersionHistoryController.class);
+    private static final Logger _log = LoggerFactory.getLogger(ServiceVersionHistoryController.class);
 
     private final ServiceVersionHistoryService _versionHistoryService;
 
@@ -56,10 +55,11 @@ public class ServiceVersionHistoryController {
             @Parameter(description = "Cluster name") @PathVariable String clusterId,
             @Parameter(description = "Namespace name") @PathVariable String namespace,
             @Parameter(description = "Service (Deployment) name") @PathVariable String serviceName) {
-        _log.info("GET version history: project='{}', cluster='{}', namespace='{}', service='{}'",
-                projectId, clusterId, namespace, serviceName);
-        var history = _versionHistoryService.getVersionHistory(
-                projectId, clusterId, namespace, serviceName);
+
+        _log.info("GET version history: project='{}', cluster='{}', namespace='{}', service='{}'", projectId, clusterId, namespace, serviceName);
+
+        var history = _versionHistoryService.getVersionHistory( projectId, clusterId, namespace, serviceName );
+        
         return ResponseEntity.ok(history);
     }
 }

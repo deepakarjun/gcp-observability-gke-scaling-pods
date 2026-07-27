@@ -1,4 +1,4 @@
-export version=1.02
+export version=1.07
 echo $version
 
 export region=us-central1

@@ -5,6 +5,7 @@ import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses
 import com.costco.foundation.integration.framework.gcp.scaling.exception.ScalingException;
 import com.costco.foundation.integration.framework.gcp.scaling.factory.GkeApiClientFactory;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceRollbackService;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
 import com.costco.foundation.integration.framework.gcp.scaling.audit.Auditable;
 

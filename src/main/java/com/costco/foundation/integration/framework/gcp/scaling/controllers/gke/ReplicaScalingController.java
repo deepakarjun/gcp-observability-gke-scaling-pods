@@ -3,6 +3,7 @@ package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleToReplicasRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleToReplicasResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ReplicaScalingService;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,6 +38,12 @@ public class ReplicaScalingController {
 
         _log.info("Received scale-to request for service '{}' -> {} replicas", request.serviceName(), request.desiredReplicas());
 
-        return ResponseEntity.ok( _replicaScalingService.scaleTo(request) );
+        var auditContext = AuditContext.ofService(
+                request.projectId(),
+                request.clusterName(),   // see note: add this field to the request
+                request.namespace(),
+                request.serviceName());
+
+        return ResponseEntity.ok( _replicaScalingService.scaleTo(auditContext,request) );
     }
 }

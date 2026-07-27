@@ -1,6 +1,7 @@
 
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleToReplicasRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleToReplicasResponse;
 
@@ -9,5 +10,5 @@ import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses
  */
 public interface ReplicaScalingService {
 
-    ScaleToReplicasResponse scaleTo(ScaleToReplicasRequest request);
+    ScaleToReplicasResponse scaleTo(AuditContext auditContext, ScaleToReplicasRequest request);
 }

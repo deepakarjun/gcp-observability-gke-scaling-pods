@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public record ScaleToReplicasRequest(
         @NotBlank(message = "projectId is required") String projectId,
+        @NotBlank(message = "clusterName is required") String clusterName,
         @NotBlank(message = "namespace is required") String namespace,
         @NotBlank(message = "serviceName is required") String serviceName,
         @NotNull(message = "desiredReplicas is required")

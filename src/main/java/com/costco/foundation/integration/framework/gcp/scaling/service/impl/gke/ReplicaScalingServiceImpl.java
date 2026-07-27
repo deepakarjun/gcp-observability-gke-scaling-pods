@@ -1,8 +1,11 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
+import com.costco.foundation.integration.framework.gcp.scaling.audit.Auditable;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleToReplicasRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ScaleToReplicasResponse;
+import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ScaleDirection;
 import com.costco.foundation.integration.framework.gcp.scaling.exception.InvalidScaleRequestException;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.PodInfoService;
@@ -34,7 +37,8 @@ public class ReplicaScalingServiceImpl implements ReplicaScalingService {
     }
 
     @Override
-    public ScaleToReplicasResponse scaleTo(ScaleToReplicasRequest request) {
+    @Auditable(AuditAction.SCALE)
+    public ScaleToReplicasResponse scaleTo(AuditContext auditContext, ScaleToReplicasRequest request) {
         var projectId = request.projectId();
         var namespace = request.namespace();
         var serviceName = request.serviceName();
@@ -47,22 +51,21 @@ public class ReplicaScalingServiceImpl implements ReplicaScalingService {
         var min = minMax.minPods();
         var max = minMax.maxPods();
 
-        _log.info("Scale-to request for service '{}': desired={} bounds=[{}, {}]",
-                serviceName, desired, min, max);
+        _log.info("Scale-to request for service '{}': desired={} bounds=[{}, {}]", serviceName, desired, min, max);
 
         // 2. Validate the desired count is within HPA bounds.
         if (desired < min || desired > max) {
-            throw new InvalidScaleRequestException(
-                    "Requested replicas %d is outside the allowed HPA range [%d, %d] for service '%s'"
-                            .formatted(desired, min, max, serviceName));
+            throw new InvalidScaleRequestException( "Requested replicas %d is outside the allowed HPA range [%d, %d] for service '%s'".formatted(desired, min, max, serviceName));
         }
 
         // 3. Determine current running pods to derive the direction.
         var current = _podInfoService.getRunningPods(projectId, namespace, serviceName).runningPods();
-
         var comparison = Integer.compare(desired, current);
+
         if (comparison == 0) {
+            
             _log.info("Service '{}' already running at desired replica count {}", serviceName, desired);
+
             return ScaleToReplicasResponse.noChange(projectId, namespace, serviceName, current, min, max);
         }
 
