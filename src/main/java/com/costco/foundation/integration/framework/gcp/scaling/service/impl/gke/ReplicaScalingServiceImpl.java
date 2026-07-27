@@ -39,9 +39,11 @@ public class ReplicaScalingServiceImpl implements ReplicaScalingService {
         var namespace = request.namespace();
         var serviceName = request.serviceName();
         var desired = request.desiredReplicas();
+        var hpaName = request.hpaName();
+
 
         // 1. Read allowed bounds from the HPA.
-        var minMax = _podInfoService.getMinMaxPods(projectId, namespace, serviceName);
+        var minMax = _podInfoService.getMinMaxPods(projectId, namespace, serviceName, hpaName);
         var min = minMax.minPods();
         var max = minMax.maxPods();
 
@@ -69,9 +71,8 @@ public class ReplicaScalingServiceImpl implements ReplicaScalingService {
         // 4. Perform the scaling via the existing scaling service.
         _scalingService.scale(new ScaleRequest(namespace, serviceName, direction, desired));
 
-        _log.info("Service '{}' scaled {} from {} to {} replicas",
-                serviceName, direction, current, desired);
-        return ScaleToReplicasResponse.scaled(projectId, namespace, serviceName,
-                direction, current, desired, min, max);
+        _log.info("Service '{}' scaled {} from {} to {} replicas", serviceName, direction, current, desired);
+        
+        return ScaleToReplicasResponse.scaled(projectId, namespace, serviceName, direction, current, desired, min, max);
     }
 }

@@ -58,9 +58,9 @@ public class PodInfoServiceImpl implements PodInfoService {
     }
 
     @Override
-    public MinMaxPodResponse getMinMaxPods(String projectId, String namespace, String serviceName) {
+    public MinMaxPodResponse getMinMaxPods(String projectId, String namespace, String serviceName, String hpaName) {
     	
-        var hpaName = serviceName + HPA_SUFFIX;
+        // var hpaName = serviceName + HPA_SUFFIX;
         try {
 
         	_log.info("Fetching min/max pods for service '{}' in namespace '{}' (project '{}')", hpaName, namespace, projectId);

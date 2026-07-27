@@ -33,10 +33,10 @@ public class ReplicaScalingController {
 
     @PostMapping("/scale-to")
     @Operation(summary = "Scale a service to a specific replica count, validated against HPA min/max")
-    public ResponseEntity<ScaleToReplicasResponse> scaleTo(
-            @Valid @RequestBody ScaleToReplicasRequest request) {
-        _log.info("Received scale-to request for service '{}' -> {} replicas",
-                request.serviceName(), request.desiredReplicas());
-        return ResponseEntity.ok(_replicaScalingService.scaleTo(request));
+    public ResponseEntity<ScaleToReplicasResponse> scaleTo( @Valid @RequestBody ScaleToReplicasRequest request ) {
+
+        _log.info("Received scale-to request for service '{}' -> {} replicas", request.serviceName(), request.desiredReplicas());
+
+        return ResponseEntity.ok( _replicaScalingService.scaleTo(request) );
     }
 }

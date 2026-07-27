@@ -10,5 +10,5 @@ public interface PodInfoService {
 
     PodInfoResponse getRunningPods(String projectId, String namespace, String serviceName);
 
-    MinMaxPodResponse getMinMaxPods(String projectId, String namespace, String serviceName);
+    MinMaxPodResponse getMinMaxPods(String projectId, String namespace, String serviceName, String HpaName);
 }

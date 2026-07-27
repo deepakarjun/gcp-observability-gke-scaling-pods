@@ -44,8 +44,11 @@ public class PodInfoController {
     public ResponseEntity<MinMaxPodResponse> getMinMaxPods(
             @RequestParam String projectId,
             @RequestParam String namespace,
-            @RequestParam String serviceName) {
+            @RequestParam String serviceName,
+            @RequestParam String hpaName) {
+
         _log.info("Received min/max pods request for service '{}'", serviceName);
-        return ResponseEntity.ok(_podInfoService.getMinMaxPods(projectId, namespace, serviceName));
+
+        return ResponseEntity.ok( _podInfoService.getMinMaxPods(projectId, namespace, serviceName, hpaName) );
     }
 }

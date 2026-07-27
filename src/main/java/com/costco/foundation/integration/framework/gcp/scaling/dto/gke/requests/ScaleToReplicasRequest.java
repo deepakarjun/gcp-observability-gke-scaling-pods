@@ -18,5 +18,6 @@ public record ScaleToReplicasRequest(
         @NotBlank(message = "namespace is required") String namespace,
         @NotBlank(message = "serviceName is required") String serviceName,
         @NotNull(message = "desiredReplicas is required")
-        @Min(value = 1, message = "desiredReplicas must be >= 1") Integer desiredReplicas) {
+        @Min(value = 1, message = "desiredReplicas must be >= 1") Integer desiredReplicas,
+        @NotBlank(message = "hpaName is required") String hpaName ) {
 }
