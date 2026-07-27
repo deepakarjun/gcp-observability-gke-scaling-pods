@@ -8,6 +8,7 @@ import com.costco.foundation.integration.framework.gcp.scaling.service.gke.Servi
 
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
 import com.costco.foundation.integration.framework.gcp.scaling.audit.Auditable;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 
 import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
@@ -53,7 +54,7 @@ public class ServiceRollbackServiceImpl implements ServiceRollbackService {
 
     @Override
     @Auditable(AuditAction.ROLLBACK)
-    public RollbackResult rollback( String projectId, String clusterId, String namespace, String serviceName, RollbackRequest request) {
+    public RollbackResult rollback( AuditContext auditContext, String projectId, String clusterId, String namespace, String serviceName, RollbackRequest request) {
     	
         var requestedRevision = resolveRequestedRevision(request);
         _log.info("Rolling back service '{}' in namespace '{}', cluster '{}' (target revision: {})", serviceName, namespace, clusterId, requestedRevision == PREVIOUS_REVISION_SENTINEL ? "previous" : requestedRevision);

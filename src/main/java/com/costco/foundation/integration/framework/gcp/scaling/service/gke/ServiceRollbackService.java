@@ -1,5 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.RollbackRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.RollbackResult;
 
@@ -20,6 +21,7 @@ public interface ServiceRollbackService {
      * @return the rollback result
      */
     RollbackResult rollback(
+            AuditContext auditContext,
             String projectId, 
             String clusterId, 
             String namespace,

@@ -3,6 +3,7 @@ package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.RollbackRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.RollbackResult;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceRollbackService;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -60,10 +61,15 @@ public class ServiceRollbackController {
             @Parameter(description = "Cluster name") @PathVariable String clusterId,
             @Parameter(description = "Namespace name") @PathVariable String namespace,
             @Parameter(description = "Service (Deployment) name") @PathVariable String serviceName,
-            @RequestBody(required = false) RollbackRequest request) {
-        _log.info("POST rollback: project='{}', cluster='{}', namespace='{}', service='{}'",
-                projectId, clusterId, namespace, serviceName);
-        var result = _rollbackService.rollback(projectId, clusterId, namespace, serviceName, request);
+            @RequestBody(required = false) RollbackRequest request
+        ) {
+
+        _log.info("POST rollback: project='{}', cluster='{}', namespace='{}', service='{}'", projectId, clusterId, namespace, serviceName);
+        
+        var auditContext = AuditContext.ofService(projectId, clusterId, namespace, serviceName);
+
+        var result = _rollbackService.rollback(auditContext, projectId, clusterId, namespace, serviceName, request);
+        
         return ResponseEntity.ok(result);
     }
 }
