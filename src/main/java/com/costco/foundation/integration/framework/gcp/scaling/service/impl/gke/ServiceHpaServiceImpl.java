@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
  * Default implementation that resolves the HorizontalPodAutoscaler targeting a
  * service by matching each HPA's {@code scaleTargetRef} against the service name.

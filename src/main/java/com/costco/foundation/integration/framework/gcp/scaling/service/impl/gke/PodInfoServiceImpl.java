@@ -20,7 +20,6 @@ public class PodInfoServiceImpl implements PodInfoService {
 
     private static final Logger _log = LoggerFactory.getLogger(PodInfoServiceImpl.class);
     private static final String RUNNING_PHASE = "Running";
-    private static final String HPA_SUFFIX = "-hpa";
 
     private final CoreV1Api _coreV1Api;
     private final AutoscalingV1Api _autoscalingV1Api;
@@ -59,8 +58,7 @@ public class PodInfoServiceImpl implements PodInfoService {
 
     @Override
     public MinMaxPodResponse getMinMaxPods(String projectId, String namespace, String serviceName, String hpaName) {
-    	
-        // var hpaName = serviceName + HPA_SUFFIX;
+
         try {
 
         	_log.info("Fetching min/max pods for service '{}' in namespace '{}' (project '{}')", hpaName, namespace, projectId);

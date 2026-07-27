@@ -1,5 +1,6 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.gke;
 
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
@@ -9,7 +10,7 @@ import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses
  */
 public interface ServiceLifecycleService {
 
-    ServiceStateResponse suspend(SuspendRequest request);
+    ServiceStateResponse suspend(AuditContext auditContext, SuspendRequest request);
 
-    ServiceStateResponse resume(ResumeRequest request);
+    ServiceStateResponse resume(AuditContext auditContext, ResumeRequest request);
 }

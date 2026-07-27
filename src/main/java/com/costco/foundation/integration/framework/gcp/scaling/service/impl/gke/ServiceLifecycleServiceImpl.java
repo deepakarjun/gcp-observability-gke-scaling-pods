@@ -1,11 +1,12 @@
 package com.costco.foundation.integration.framework.gcp.scaling.service.impl.gke;
 
 import com.costco.foundation.integration.framework.gcp.scaling.audit.Auditable;
+import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ScaleRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
-import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.AuditAction;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ScaleDirection;
 import com.costco.foundation.integration.framework.gcp.scaling.enums.gke.ServiceState;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ScalingService;
@@ -39,7 +40,7 @@ public class ServiceLifecycleServiceImpl implements ServiceLifecycleService {
 
     @Override
     @Auditable(AuditAction.SUSPEND)
-    public ServiceStateResponse suspend(SuspendRequest request) {
+    public ServiceStateResponse suspend(AuditContext auditContext, SuspendRequest request) {
         _log.info("Suspending service '{}' in namespace '{}' (project '{}')",
                 request.serviceName(), request.namespace(), request.projectId());
 
@@ -54,7 +55,7 @@ public class ServiceLifecycleServiceImpl implements ServiceLifecycleService {
 
     @Override
     @Auditable(AuditAction.RESUME)
-    public ServiceStateResponse resume(ResumeRequest request) {
+    public ServiceStateResponse resume(AuditContext auditContext, ResumeRequest request) {
         var replicas = resolveResumeReplicas(request);
         _log.info("Resuming service '{}' in namespace '{}' to {} replicas (project '{}')",
                 request.serviceName() + HPA_SUFFIX, request.namespace(), replicas, request.projectId());

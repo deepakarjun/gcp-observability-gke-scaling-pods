@@ -2,6 +2,7 @@ package com.costco.foundation.integration.framework.gcp.scaling.controllers.gke;
 
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.ResumeRequest;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.requests.SuspendRequest;
+import com.costco.foundation.integration.framework.gcp.scaling.audit.AuditContext;
 import com.costco.foundation.integration.framework.gcp.scaling.dto.gke.responses.ServiceStateResponse;
 import com.costco.foundation.integration.framework.gcp.scaling.service.gke.ServiceLifecycleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,14 +35,30 @@ public class ServiceLifecycleController {
     @PostMapping("/suspend")
     @Operation(summary = "Suspend a service by scaling it down to zero replicas")
     public ResponseEntity<ServiceStateResponse> suspend(@Valid @RequestBody SuspendRequest request) {
+
         _log.info("Received suspend request for service '{}'", request.serviceName());
-        return ResponseEntity.ok(_lifecycleService.suspend(request));
+
+        var auditContext = AuditContext.ofService(
+                request.projectId(),
+                request.clusterName(),   // see note: add this field to the request
+                request.namespace(),
+                request.serviceName());
+
+        return ResponseEntity.ok(_lifecycleService.suspend(auditContext, request));
     }
 
     @PostMapping("/resume")
     @Operation(summary = "Resume a suspended service by scaling it back up")
     public ResponseEntity<ServiceStateResponse> resume(@Valid @RequestBody ResumeRequest request) {
+
         _log.info("Received resume request for service '{}'", request.serviceName());
-        return ResponseEntity.ok(_lifecycleService.resume(request));
+
+        var auditContext = AuditContext.ofService(
+                request.projectId(),
+                request.clusterName(),   // see note: add this field to the request
+                request.namespace(),
+                request.serviceName());
+
+        return ResponseEntity.ok(_lifecycleService.resume(auditContext, request));
     }
 }

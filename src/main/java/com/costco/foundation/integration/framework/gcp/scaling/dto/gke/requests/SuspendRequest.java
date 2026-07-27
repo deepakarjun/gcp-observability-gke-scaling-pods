@@ -12,5 +12,6 @@ import jakarta.validation.constraints.NotBlank;
 public record SuspendRequest(
         @NotBlank(message = "projectId is required") String projectId,
         @NotBlank(message = "namespace is required") String namespace,
+        @NotBlank(message = "clusterName is required") String clusterName,
         @NotBlank(message = "serviceName is required") String serviceName) {
 }
